@@ -1,0 +1,19 @@
+version: '3'
+services:
+  newzen_api:
+    container_name: "newzen_api"
+    image: "newzen_api"
+    build:
+      dockerfile: ./docker/php/Dockerfile
+      args:
+        docker_env: dev
+    ports:
+      - 7632:80
+    privileged: true
+    volumes:
+      - ./src:/app/src
+      - ./config:/app/config
+      - ./web:/app/web
+    restart: always
+    env_file:
+      - .env
