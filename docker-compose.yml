@@ -4,7 +4,7 @@ services:
     container_name: "newzen_api"
     image: "newzen_api"
     build:
-      dockerfile: ./docker/php/Dockerfile
+      dockerfile: Dockerfile
       args:
         docker_env: dev
     ports:
