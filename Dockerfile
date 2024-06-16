@@ -34,7 +34,7 @@ ADD src /app/src/
 ADD config /app/config
 
 COPY .env-dist ./.env
-COPY .unit.conf.json /docker-entrypoint.d/.unit.conf.json
+COPY unit.conf.json /docker-entrypoint.d/.unit.conf.json
 
 RUN mkdir -p runtime web/assets && \
     chmod -R 775 runtime web/assets
