@@ -1,0 +1,59 @@
+{
+    "settings": {
+        "http": {
+            "max_body_size": 2000000000
+        }
+    },
+    "listeners": {
+        "*:80": {
+            "pass": "routes"
+        }
+    },
+    "routes": [
+        {
+            "match": {
+                "uri": [
+                    "!/assets/*",
+                    "*.php",
+                    "*.php/*"
+                ]
+            },
+            "action": {
+                "pass": "applications/yii/direct"
+            }
+        },
+        {
+            "action": {
+                "share": "/app/web$uri",
+                "fallback": {
+                    "pass": "applications/yii/index"
+                }
+            }
+        }
+    ],
+    "applications": {
+        "yii": {
+            "type": "php",
+            "processes": {
+                "max": 3000,
+                "spare": 20,
+                "idle_timeout": 20
+            },
+            "targets": {
+                "direct": {
+                    "root": "/app/web"
+                },
+                "index": {
+                    "root": "/app/web",
+                    "script": "index.php"
+                }
+            },
+            "options": {
+                "admin": {
+                    "post_max_size": "200M",
+                    "upload_max_filesize": "200M"
+                }
+            }
+        }
+    }
+}

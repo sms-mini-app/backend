@@ -5,17 +5,11 @@ RUN apt-get -y install git
 RUN apt-get install zip unzip
 RUN apt-get install -y supervisor
 
-#install docker.io
-RUN apt-get -y install docker.io
-
 #install pdo_mysql
 # Install Extension PHP Easy Installer
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 RUN chmod +x /usr/local/bin/install-php-extensions
-# add config git
-COPY /docker/php/git/gitconfig /etc/gitconfig
-# copy config supervisord
-COPY /docker/supervisor /etc/supervisor/conf.d
+
 RUN install-php-extensions \
     pdo \
     pdo_mysql \
@@ -40,7 +34,7 @@ ADD src /app/src/
 ADD config /app/config
 
 COPY .env-dist ./.env
-COPY docker/php/.unit.conf.json /docker-entrypoint.d/.unit.conf.json
+COPY .unit.conf.json /docker-entrypoint.d/.unit.conf.json
 
 RUN mkdir -p runtime web/assets && \
     chmod -R 775 runtime web/assets
