@@ -1,0 +1,53 @@
+{
+  "name": "dtsmart/yii2-micro-app-template",
+  "description": "Yii2 Framework template for micro app",
+  "type": "project-template",
+  "keywords": [
+    "yii2",
+    "template",
+    "micro"
+  ],
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "require": {
+    "yidas/yii2-composer-bower-skip": "~2.0.13",
+    "yiisoft/yii2": "~2.0.45",
+    "vlucas/phpdotenv": "^5.4",
+    "samdark/yii2-psr-log-target": "*",
+    "monolog/monolog": "*",
+    "sentry/sdk": "^3.1",
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^7.0",
+    "ext-openssl": "*",
+    "ramsey/uuid": "^4.7",
+    "yiisoft/yii2-redis": "^2.0",
+    "phpoffice/phpspreadsheet": "^2.1"
+  },
+  "require-dev": {
+    "yidas/yii2-bower-asset": "~2.0.13",
+    "yiisoft/yii2-debug": "~2.1.0",
+    "yiisoft/yii2-gii": "~2.2.0",
+    "yiisoft/yii2-bootstrap": "2.*",
+    "symfony/var-dumper": "^6.1",
+    "schmunk42/yii2-giiant": "@stable",
+    "codeception/codeception": "^5.0"
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "app\\": "src"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true,
+      "yiisoft/yii2-composer": true,
+      "php-http/discovery": true
+    }
+  }
+}
