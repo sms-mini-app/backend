@@ -14,7 +14,8 @@ RUN install-php-extensions \
     pdo \
     pdo_mysql \
     http \
-    gd
+    gd \
+    zip
 #install opcache
 RUN if [ "$docker_env" != "dev" ] ; then install-php-extensions opcache ; else echo skip opcache ; fi
 
