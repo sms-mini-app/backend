@@ -1,8 +1,8 @@
 version: '3'
 services:
   newzen_api:
-    container_name: "newzen_api"
-    image: "newzen_api"
+    container_name: "sms-mini-app"
+    image: "sms-mini-app"
     build:
       dockerfile: Dockerfile
       args:
@@ -17,3 +17,5 @@ services:
     restart: always
     env_file:
       - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
