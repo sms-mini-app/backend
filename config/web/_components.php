@@ -7,8 +7,7 @@ $components = [
         'errorAction' => 'site/error',
     ],
     'user' => [
-        'identityClass' => 'app\models\UserIdentity',
-        'enableAutoLogin' => true,
+        'identityClass' => 'app\models\DeviceIdentity',
     ],
     'cache' => require("_cache.php"),
     'request' => [

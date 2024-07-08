@@ -6,6 +6,7 @@ use app\components\insight\InsightComponent;
 use app\components\screenshot\ScreenshotComponent;
 use app\components\storage\Storage;
 use app\components\web_portal\plugin\PluginStore;
+use app\models\Device;
 use yii\queue\redis\Queue;
 use yii\redis\Connection;
 
@@ -18,33 +19,12 @@ class Yii extends \yii\BaseYii
 }
 
 /**
- * @property app\components\web_portal\Component $web_portal
- * @property app\components\web_portal\Component $web_portal_custom
- * @property Queue $queue
- * @property Queue $queue_sync
- * @property Queue $queue_mqtt
- * @property Queue $queue_build
- * @property app\models\UserIdentity $user
- * @property app\components\web_portal\log\ $log_project
- * @property app\components\mqtt\MqttClient $mqtt
- * @property CloudFlarePage $cloudflare_page
- * @property ScreenshotComponent $screenshot
- * @property Storage $storage
- * @property KvStorageClient $cloudflare_kv
- * @property InsightComponent $insight
- * @property Connection $redis
+ * @property app\models\DeviceIdentity $device
  */
 abstract class BaseApplication extends yii\base\Application
 {
     /**
-     * @var User
+     * @var Device
      */
-    public $user;
-}
-
-/**
- * @property app\models\UserIdentity $identity
- */
-abstract class User extends \yii\web\User
-{
+    public $device;
 }

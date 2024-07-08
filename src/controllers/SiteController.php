@@ -39,4 +39,9 @@ class SiteController extends Controller
         return "Sms Mini App";
     }
 
+    public function actionStatus()
+    {
+        return "oke";
+    }
+
 }

@@ -9,6 +9,7 @@ class m240613_150651_create_table_devices extends Migration
 {
     /**
      * {@inheritdoc}
+     * @throws \yii\base\Exception
      */
     public function safeUp()
     {

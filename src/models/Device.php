@@ -10,6 +10,8 @@ use yii\behaviors\TimestampBehavior;
  */
 class Device extends BaseDevice
 {
+    const STATUS_ACTIVE = 1;
+
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
@@ -19,7 +21,6 @@ class Device extends BaseDevice
             ]
         ]);
     }
-
 
 
     public function formName()

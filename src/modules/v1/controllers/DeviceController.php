@@ -3,22 +3,31 @@
 namespace app\modules\v1\controllers;
 
 use app\components\http\ApiConstant;
-use app\controllers\Controller;
+use app\models\DeviceToken;
 use app\modules\v1\models\form\DeviceForm;
+use app\modules\v1\models\form\UpdateTenantForm;
 use Yii;
 use yii\db\Exception;
+use yii\filters\auth\HttpBearerAuth;
 
 class DeviceController extends Controller
 {
+    public function behaviors(): array
+    {
+        return array_merge(parent::behaviors(), [
+            "auth" => [
+                'class' => HttpBearerAuth::class,
+                'except' => ["register"]
+            ],
+        ]);
+    }
 
     /**
-     * @param $device_uuid
      * @return array
      */
-    public function actionCheckDevice($device_uuid): array
+    public function actionCheckDevice()
     {
-        $deviceUuidHash = md5($device_uuid);
-        $device = DeviceForm::find()->where(["device_uuid_hash" => $deviceUuidHash])->one();
+        $device = DeviceForm::find()->where(["id" => Yii::$app->user->getId()])->one();
         if (!$device) {
             return $this->responseBuilder->json(false, $device, "Device not found", ApiConstant::STATUS_NOT_FOUND);
         }
@@ -27,7 +36,21 @@ class DeviceController extends Controller
 
     /**
      * @return array
+     */
+    public function actionUpdateTenant()
+    {
+        $updateTenant = UpdateTenantForm::find()->where(["id" => Yii::$app->user->getId()])->one();
+        $updateTenant->load(Yii::$app->request->post());
+        if ($updateTenant->validate() && $updateTenant->save()) {
+            return $this->responseBuilder->json(true, [], "Update tenant successfully");
+        }
+        return $this->responseBuilder->json(false, ["errors" => $updateTenant->getErrors()], "Can't update tenant", ApiConstant::STATUS_BAD_REQUEST);
+    }
+
+    /**
+     * @return array
      * @throws Exception
+     * @throws \Exception
      */
     public function actionRegister(): array
     {
@@ -44,6 +67,12 @@ class DeviceController extends Controller
         if (!$device->validate() || !$device->save()) {
             return $this->responseBuilder->json(false, $device, "Can't register device", ApiConstant::STATUS_BAD_REQUEST);
         }
-        return $this->responseBuilder->json(true, $device, "Success");
+        $deviceToken = DeviceToken::find()->where(["device_id" => $device->id])->available()->one();
+        if (!$deviceToken) {
+            $deviceToken = new DeviceToken();
+            $deviceToken->generateToken($device->id);
+            $deviceToken->save(false);
+        }
+        return $this->responseBuilder->json(true, ["device" => $device, "token" => $deviceToken->token], "Success");
     }
 }

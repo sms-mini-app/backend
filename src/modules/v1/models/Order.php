@@ -12,11 +12,23 @@ class Order extends BaseOrder
     public function fields()
     {
         return [
-            "created_at",
-            "expired_at",
+            "id",
+            "price",
+            "created_at" => function () {
+                return strtotime($this->created_at);
+            },
+            "expired_at" => function () {
+                return strtotime($this->expired_at);
+            },
             "type",
-            "provider_code"
+            "provider_code",
+            "package"
         ];
+    }
+
+    public function getPackage()
+    {
+        return $this->hasOne(Package::class, ["id" => "package_id"]);
     }
 
     public function addUseDuration($duration): void
