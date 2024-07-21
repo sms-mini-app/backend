@@ -33,7 +33,11 @@ class ReadExcelController extends Controller
                 $result[] = [
                     "id" => $time + $index,
                     "fullname" => $this->handleText($fullName),
-                    "phone" => $this->filterPhone($this->handleText($phone))
+                    "phone" => $this->filterPhone($this->handleText($phone)),
+                    "address" => $row[3] ?? "",
+                    "option_1" => $row[4] ?? "",
+                    "option_2" => $row[5] ?? "",
+                    "option_3" => $row[6] ?? ""
                 ];
             }
         }
