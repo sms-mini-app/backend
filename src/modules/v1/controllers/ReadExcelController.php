@@ -2,6 +2,7 @@
 
 namespace app\modules\v1\controllers;
 
+use app\components\http\ApiConstant;
 use app\controllers\Controller;
 use yii\web\UploadedFile;
 
@@ -13,6 +14,9 @@ class ReadExcelController extends Controller
     public function actionCreate()
     {
         $file = UploadedFile::getInstanceByName("file");
+        if (!$file) {
+            return $this->responseBuilder->json(false, [], "Fail", ApiConstant::STATUS_BAD_REQUEST);
+        }
         /** Load $inputFileName to a Spreadsheet Object **/
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->tempName);
         $worksheet = $spreadsheet->getActiveSheet();
@@ -35,9 +39,17 @@ class ReadExcelController extends Controller
                     "fullname" => $this->handleText($fullName),
                     "phone" => $this->filterPhone($this->handleText($phone)),
                     "address" => $row[3] ?? "",
+                    "option" => $row[3] ?? "",
                     "option_1" => $row[4] ?? "",
                     "option_2" => $row[5] ?? "",
-                    "option_3" => $row[6] ?? ""
+                    "option_3" => $row[6] ?? "",
+                    "col_a" => $row[0],
+                    "col_b" => $row[1] ?? "",
+                    "col_c" => $row[2],
+                    "col_d" => $row[3] ?? "",
+                    "col_e" => $row[4] ?? "",
+                    "col_f" => $row[5] ?? "",
+                    "col_g" => $row[6] ?? ""
                 ];
             }
         }
