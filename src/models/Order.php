@@ -10,4 +10,5 @@ use \app\models\base\Order as BaseOrder;
 class Order extends BaseOrder
 {
     const TYPE_MOMO = "momo";
+    const TYPE_GMAIL = "gmail";
 }
