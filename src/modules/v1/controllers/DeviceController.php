@@ -63,8 +63,8 @@ class DeviceController extends Controller
         $device = DeviceForm::find()->where(["device_uuid_hash" => $deviceUuidHash])->one();
         if (!$device) {
             $device = new DeviceForm(["device_uuid_hash" => $deviceUuidHash]);
-            $device->load(Yii::$app->request->post());
         }
+        $device->load(Yii::$app->request->post());
         if (!$device->validate() || !$device->save()) {
             return $this->responseBuilder->json(false, $device, "Can't register device", ApiConstant::STATUS_BAD_REQUEST);
         }
