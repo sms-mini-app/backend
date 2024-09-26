@@ -70,13 +70,10 @@ class DeviceController extends Controller
         }
         $deviceToken = DeviceToken::find()->where(["device_id" => $device->id])->available()->one();
         if (!$deviceToken) {
-            $order = new Order(["device_id" => $device->id, "package_id" => 1, "status" => 1, "expired_at" => date("Y-m-d H:i:s", strtotime("+ 3year"))]);
-            $order->save(false);
             $deviceToken = new DeviceToken();
             $deviceToken->generateToken($device->id);
             $deviceToken->save(false);
         }
-
         return $this->responseBuilder->json(true, ["device" => $device, "token" => $deviceToken->token], "Success");
     }
 }
