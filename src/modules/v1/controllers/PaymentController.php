@@ -77,7 +77,10 @@ class PaymentController extends Controller
             Yii::info(["request" => Yii::$app->request->post(), "message" => "Device not found"], "payment");
             return $this->responseBuilder->json(false, [], "Device not found", ApiConstant::STATUS_NOT_FOUND);
         }
-        $package = Package::find()->one();
+        $package = Package::find()->andWhere(["code" => $checkoutForm->package_code])->one();
+        if (!$package) {
+            return $this->responseBuilder->json(false, [], "Package not found", ApiConstant::STATUS_NOT_FOUND);
+        }
         if (floatval($package->price) != $checkoutForm->price) {
             Yii::info(["request" => Yii::$app->request->post(), "message" => "Price invalid"], "payment");
             return $this->responseBuilder->json(false, [], "Price invalid", ApiConstant::STATUS_BAD_REQUEST);
