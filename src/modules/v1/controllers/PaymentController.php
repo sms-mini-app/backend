@@ -65,7 +65,7 @@ class PaymentController extends Controller
     public function actionCheckoutGmail()
     {
         $checkoutForm = new CheckoutFormGmail();
-        $checkoutForm->load(Yii::$app->request->post());
+        $checkoutForm->load(Yii::$app->request->post() ?? Yii::$app->request->get());
         if (!$checkoutForm->validate()) {
             Yii::info(["error" => $checkoutForm->getErrors(), "request" => Yii::$app->request->post()], "payment");
             return $this->responseBuilder->json(false, [
