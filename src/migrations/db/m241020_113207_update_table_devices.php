@@ -12,8 +12,8 @@ class m241020_113207_update_table_devices extends Migration
      */
     public function safeUp()
     {
-        $this->addColumn("devices", "version_id", $this->integer());
-        $this->createIndex("idx-devices-version_id", "devices", "version_id");
+        $this->addColumn("devices", "version_level", $this->integer());
+        $this->createIndex("idx-devices-version_level", "devices", "version_level");
     }
 
     /**
