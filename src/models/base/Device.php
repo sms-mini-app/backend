@@ -17,7 +17,7 @@ use \app\models\DeviceQuery;
  * @property string $device_uuid_hash
  * @property array $info
  * @property string $logged_at
- * @property integer $version_id
+ * @property integer $version_level
  * @property string $created_at
  * @property string $updated_at
  */
@@ -54,7 +54,7 @@ abstract class Device extends \yii\db\ActiveRecord
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
             [['info', 'logged_at'], 'safe'],
-            [['version_id'], 'integer'],
+            [['version_level'], 'integer'],
             [['tenant_id'], 'string', 'max' => 255],
             [['device_uuid_hash'], 'string', 'max' => 500]
         ]);
@@ -73,7 +73,7 @@ abstract class Device extends \yii\db\ActiveRecord
             'logged_at' => 'Logged At',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'version_id' => 'Version ID',
+            'version_level' => 'Version Level',
         ]);
     }
 
