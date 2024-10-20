@@ -7,21 +7,22 @@ namespace app\models\base;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\behaviors\TimestampBehavior;
-use \app\models\DeviceQuery;
+use \app\models\AppQuery;
 
 /**
- * This is the base-model class for table "devices".
+ * This is the base-model class for table "apps".
  *
  * @property integer $id
- * @property string $tenant_id
- * @property string $device_uuid_hash
- * @property array $info
- * @property string $logged_at
- * @property integer $version_id
+ * @property string $version
+ * @property integer $version_level
+ * @property integer $required_update
+ * @property string $description_upgrade
+ * @property string $link
+ * @property integer $status
  * @property string $created_at
  * @property string $updated_at
  */
-abstract class Device extends \yii\db\ActiveRecord
+abstract class App extends \yii\db\ActiveRecord
 {
 
     /**
@@ -29,7 +30,7 @@ abstract class Device extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'devices';
+        return 'apps';
     }
 
     /**
@@ -53,10 +54,9 @@ abstract class Device extends \yii\db\ActiveRecord
     {
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
-            [['info', 'logged_at'], 'safe'],
-            [['version_id'], 'integer'],
-            [['tenant_id'], 'string', 'max' => 255],
-            [['device_uuid_hash'], 'string', 'max' => 500]
+            [['version_level', 'required_update', 'status'], 'integer'],
+            [['description_upgrade'], 'string'],
+            [['version', 'link'], 'string', 'max' => 255]
         ]);
     }
 
@@ -67,22 +67,23 @@ abstract class Device extends \yii\db\ActiveRecord
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'id' => 'ID',
-            'tenant_id' => 'Tenant ID',
-            'device_uuid_hash' => 'Device Uuid Hash',
-            'info' => 'Info',
-            'logged_at' => 'Logged At',
+            'version' => 'Version',
+            'version_level' => 'Version Level',
+            'required_update' => 'Required Update',
+            'description_upgrade' => 'Description Upgrade',
+            'link' => 'Link',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
-            'version_id' => 'Version ID',
         ]);
     }
 
     /**
      * @inheritdoc
-     * @return DeviceQuery the active query used by this AR class.
+     * @return AppQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new DeviceQuery(static::class);
+        return new AppQuery(static::class);
     }
 }

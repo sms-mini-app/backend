@@ -39,7 +39,8 @@ class ReadExcelController extends Controller
                     "fullname" => $this->handleText($fullName),
                     "phone" => $this->filterPhone($this->handleText($phone)),
                     "address" => $row[3] ?? "",
-                    "option" => $row[3] ?? "",
+                    "
+                    " => $row[3] ?? "",
                     "option_1" => $row[4] ?? "",
                     "option_2" => $row[5] ?? "",
                     "option_3" => $row[6] ?? "",
@@ -118,6 +119,7 @@ class ReadExcelController extends Controller
                 'ú', 'ù', 'ủ', 'ũ', 'ụ', 'ư', 'ứ', 'ừ', 'ử', 'ữ', 'ự',
                 'Ú', 'Ù', 'Ủ', 'Ũ', 'Ụ', 'Ư', 'Ứ', 'Ừ', 'Ử', 'Ữ', 'Ự',
                 'Ý', 'Ỳ', 'Ỷ', 'Ỹ', 'Ỵ',
+                'ý', 'ỳ', 'ỷ', 'ỹ', 'ỵ',
                 'đ', 'Đ'
             ),
             array(
@@ -132,6 +134,7 @@ class ReadExcelController extends Controller
                 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u', 'u',
                 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U', 'U',
                 'Y', 'Y', 'Y', 'Y', 'Y',
+                'y', 'y', 'y', 'y', 'y',
                 'd', 'D'
             ),
             $str
