@@ -2,7 +2,6 @@
 
 namespace app\models;
 
-use App;
 
 /**
  * This is the ActiveQuery class for [[App]].
@@ -13,5 +12,8 @@ use App;
  */
 class AppQuery extends \yii\db\ActiveQuery
 {
-
+    public function active()
+    {
+        return $this->andWhere(["status" => App::STATUS_ACTIVE]);
+    }
 }

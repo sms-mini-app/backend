@@ -9,5 +9,6 @@ use \app\models\base\App as BaseApp;
  */
 class App extends BaseApp
 {
+    const STATUS_ACTIVE = 1;
 
 }

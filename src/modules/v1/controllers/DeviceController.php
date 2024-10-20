@@ -5,6 +5,7 @@ namespace app\modules\v1\controllers;
 use app\components\http\ApiConstant;
 use app\models\DeviceToken;
 use app\models\Order;
+use app\modules\v1\models\App;
 use app\modules\v1\models\form\DeviceForm;
 use app\modules\v1\models\form\UpdateTenantForm;
 use Yii;
@@ -18,7 +19,7 @@ class DeviceController extends Controller
         return array_merge(parent::behaviors(), [
             "auth" => [
                 'class' => HttpBearerAuth::class,
-                'except' => ["register"]
+                'except' => ["register", "check-version"]
             ],
         ]);
     }
@@ -33,6 +34,20 @@ class DeviceController extends Controller
             return $this->responseBuilder->json(false, $device, "Device not found", ApiConstant::STATUS_NOT_FOUND);
         }
         return $this->responseBuilder->json(true, $device, "Success");
+    }
+
+    public function actionCheckVersion()
+    {
+        $versionLevel = Yii::$app->request->post("version_level");
+        $app = App::find()->where(["version_level" => $versionLevel])->active()->one();
+        if (!$app) {
+            return $this->responseBuilder->json(false, [], "Version invalid", ApiConstant::STATUS_BAD_REQUEST);
+        }
+        $appVersionLast = App::find()->limit(1)->active()->orderBy(["version_level" => SORT_DESC])->one();
+        return $this->responseBuilder->json(true, [
+            "app" => $app,
+            "app_version_last" => $appVersionLast
+        ], "Success");
     }
 
     /**
