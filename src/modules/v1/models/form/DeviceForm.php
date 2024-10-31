@@ -3,6 +3,7 @@
 namespace app\modules\v1\models\form;
 
 use app\modules\v1\models\Device;
+use Yii;
 
 class DeviceForm extends Device
 {
@@ -28,6 +29,7 @@ class DeviceForm extends Device
 
     public function generateTenantId(): void
     {
-        $this->tenant_id = time();
+        $deviceIdLast = self::find()->limit(1)->orderBy(["id" => SORT_DESC])->one();
+        $this->tenant_id = 'D' . str_pad($deviceIdLast->id + 1, 10, "0", STR_PAD_LEFT);
     }
 }
