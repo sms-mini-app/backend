@@ -80,6 +80,9 @@ class DeviceController extends Controller
             $device = new DeviceForm(["device_uuid_hash" => $deviceUuidHash]);
         }
         $device->load(Yii::$app->request->post());
+        if (!$device->version_level) {
+            return $this->responseBuilder->json(false, $device, "Can't register device version old", ApiConstant::STATUS_BAD_REQUEST);
+        }
         if (!$device->validate() || !$device->save()) {
             return $this->responseBuilder->json(false, $device, "Can't register device", ApiConstant::STATUS_BAD_REQUEST);
         }
