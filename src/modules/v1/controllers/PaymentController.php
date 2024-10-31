@@ -9,6 +9,8 @@ use app\modules\v1\models\form\CheckoutForm;
 use app\modules\v1\models\form\CheckoutFormGmail;
 use app\modules\v1\models\Order;
 use app\modules\v1\models\Package;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use Yii;
 use yii\db\Exception;
 
@@ -110,5 +112,17 @@ class PaymentController extends Controller
         }
 
         return $this->responseBuilder->json(true, [], "Create order successfully");
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function actionConfirmPayment()
+    {
+        $client = new Client(['base_uri' => env("BASE_URL_SERVICE_GMAIL")]);
+        $client->post('/', [
+            "json" => ["token" => "123456abcA"]
+        ]);
+        return $this->responseBuilder->json(true, [], "payment success");
     }
 }
