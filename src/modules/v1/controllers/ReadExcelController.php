@@ -81,8 +81,8 @@ class ReadExcelController extends Controller
         if (strlen($phone) < 10) {
             return "0" . $phone;
         }
-
-        return $phone;
+        $cleanedCoutryCode = preg_replace('/^84/','0' , $phone);
+        return $cleanedCoutryCode;
     }
 
     /**
