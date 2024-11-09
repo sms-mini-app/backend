@@ -34,8 +34,12 @@ class ExportExcelController extends Controller
         $reader = new Html();
         $spreadsheet = $reader->loadFromString($htmlString);
         $reader->setSheetIndex(1);
+        ob_start();
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save("php://output");
+        $data = base64_encode(ob_get_contents());
+        ob_end_clean();
+        echo $data;
         exit();
     }
 
