@@ -17,6 +17,12 @@ class ExportExcelController extends Controller
         }
         $pattern = "/^col_+/";
         $htmlString = '<table>';
+        $date = date("Y/m/d H:i:s");
+        $htmlString .= "<tr>
+            <th colspan='10' style='font-size: 16px'>
+                Xuất file excel {$date}
+            </th>
+        </tr>";
         foreach ($contacts as $contact) {
             $htmlString .= "<tr>";
             if (!is_array($contact)) {
