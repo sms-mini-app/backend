@@ -34,13 +34,13 @@ class ReadExcelController extends Controller
             $fullName = $row[0];
             $phones = preg_split("/[., ;|]/", $row[2], -1, PREG_SPLIT_NO_EMPTY);
             foreach ($phones as $phone) {
+                $columnReplaces = $this->getColumnsReplace($row);
                 $result[] = [
                     "id" => $time + $index,
                     "fullname" => $this->handleText($fullName),
                     "phone" => $this->filterPhone($this->handleText($phone)),
                     "address" => $row[3] ?? "",
-                    "
-                    " => $row[3] ?? "",
+                    "" => $row[3] ?? "",
                     "option_1" => $row[4] ?? "",
                     "option_2" => $row[5] ?? "",
                     "option_3" => $row[6] ?? "",
@@ -50,7 +50,8 @@ class ReadExcelController extends Controller
                     "col_d" => $row[3] ?? "",
                     "col_e" => $row[4] ?? "",
                     "col_f" => $row[5] ?? "",
-                    "col_g" => $row[6] ?? ""
+                    "col_g" => $row[6] ?? "",
+                    "column_replaces" => $columnReplaces
                 ];
             }
         }
@@ -58,6 +59,17 @@ class ReadExcelController extends Controller
             $result = $this->uniqueContacts($result, "phone");
         }
         return $this->responseBuilder->json(true, $result, "Success");
+    }
+
+    protected function getColumnsReplace($row = [])
+    {
+        $columnsReplace = [];
+        $alphabets = range("a", "z");
+        $rowMax = count($row);
+        for ($i = 0; $i < $rowMax; $i++) {
+            $columnsReplace[str_repeat($alphabets[$i], 3)] = $row[$i];
+        }
+        return $columnsReplace;
     }
 
     /**
@@ -81,7 +93,7 @@ class ReadExcelController extends Controller
         if (strlen($phone) < 10) {
             return "0" . $phone;
         }
-        $cleanedCoutryCode = preg_replace('/^84/','0' , $phone);
+        $cleanedCoutryCode = preg_replace('/^84/', '0', $phone);
         return $cleanedCoutryCode;
     }
 
