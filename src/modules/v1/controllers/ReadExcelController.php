@@ -67,7 +67,8 @@ class ReadExcelController extends Controller
         $alphabets = range("a", "z");
         $rowMax = count($row);
         for ($i = 0; $i < $rowMax; $i++) {
-            $columnsReplace[str_repeat($alphabets[$i], 3)] = $row[$i];
+            $key = "/$alphabets[$i]";
+            $columnsReplace[$key] = $row[$i];
         }
         return $columnsReplace;
     }
