@@ -66,4 +66,19 @@ class ArrayHelper extends \yii\helpers\ArrayHelper
         }
         return [];
     }
+
+    /**
+     * @param $contacts
+     * @param $fieldCheck
+     * @return array
+     */
+    public static function uniqueColumn($contacts, $fieldCheck): array
+    {
+        $contactFiltered = [];
+        foreach ($contacts as $contact) {
+            $contactFiltered[$contact[$fieldCheck]] = $contact;
+        }
+
+        return array_values($contactFiltered);
+    }
 }

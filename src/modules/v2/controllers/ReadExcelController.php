@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\v1\controllers;
+namespace app\modules\v2\controllers;
 
 use app\components\http\ApiConstant;
 use app\controllers\Controller;
@@ -46,13 +46,6 @@ class ReadExcelController extends Controller
                     "option_1" => $row[4] ?? "",
                     "option_2" => $row[5] ?? "",
                     "option_3" => $row[6] ?? "",
-                    "col_a" => $row[0],
-                    "col_b" => $row[1] ?? "",
-                    "col_c" => $row[2],
-                    "col_d" => $row[3] ?? "",
-                    "col_e" => $row[4] ?? "",
-                    "col_f" => $row[5] ?? "",
-                    "col_g" => $row[6] ?? "",
                     "column_replaces" => $columnReplaces
                 ];
             }
@@ -63,13 +56,17 @@ class ReadExcelController extends Controller
         return $this->responseBuilder->json(true, $result, "Success");
     }
 
+    /**
+     * @param $row
+     * @return array
+     */
     protected function getColumnsReplace($row = [])
     {
         $columnsReplace = [];
         $alphabets = range("a", "z");
         $rowMax = count($row);
         for ($i = 0; $i < $rowMax; $i++) {
-            $key = "/$alphabets[$i]";
+            $key = "//$alphabets[$i]";
             $columnsReplace[$key] = $row[$i];
         }
         return $columnsReplace;
