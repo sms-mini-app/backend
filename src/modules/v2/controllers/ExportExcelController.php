@@ -43,9 +43,9 @@ class ExportExcelController extends Controller
         ob_start();
         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save("php://output");
-//        $data = base64_encode(ob_get_contents());
-//        ob_end_clean();
-//        echo $data;
+        $data = base64_encode(ob_get_contents());
+        ob_end_clean();
+        echo $data;
         exit();
     }
 
