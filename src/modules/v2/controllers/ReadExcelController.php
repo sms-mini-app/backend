@@ -3,7 +3,6 @@
 namespace app\modules\v2\controllers;
 
 use app\components\http\ApiConstant;
-use app\controllers\Controller;
 use app\helpers\ArrayHelper;
 use app\helpers\StringHelper;
 use yii\web\UploadedFile;
