@@ -5,7 +5,6 @@ namespace app\modules\v2\controllers;
 use app\components\http\ApiConstant;
 use app\helpers\ArrayHelper;
 use app\helpers\StringHelper;
-use app\controllers\Controller;
 use yii\web\UploadedFile;
 
 class ReadExcelController extends Controller
