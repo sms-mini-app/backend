@@ -52,4 +52,14 @@ class StringHelper extends BaseStringHelper
         $cleanedCoutryCode = preg_replace('/^84/', '0', $phone);
         return $cleanedCoutryCode;
     }
+
+    public static function compressString($str)
+    {
+        return base64_encode(gzcompress($str, 9));
+    }
+
+    public static function unCompressString($str): bool|string
+    {
+        return gzuncompress(base64_decode($str));
+    }
 }
