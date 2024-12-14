@@ -19,7 +19,10 @@ class SessionWorkSearch extends SessionWork
             "filename",
             "is_session_current",
             "created_at" => function () {
-                return date("d/m H:i", strtotime($this->created_at));
+                return date("H:i d/m", strtotime($this->created_at));
+            },
+            "created_at_int" => function () {
+                return strtotime($this->created_at);
             },
             "updated_at"
         ];
