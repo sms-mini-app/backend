@@ -6,6 +6,7 @@ use app\Test;
 use Yii;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
+use function Sentry\captureException;
 
 class SiteController extends Controller
 {
@@ -42,6 +43,11 @@ class SiteController extends Controller
     public function actionStatus()
     {
         return "oke";
+    }
+
+    public function actionSentry()
+    {
+        captureException(new \Exception("Huhu"));
     }
 
 }
