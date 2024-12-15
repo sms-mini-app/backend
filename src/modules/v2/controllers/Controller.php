@@ -10,9 +10,9 @@ class Controller extends BaseController
     public function behaviors()
     {
         return array_merge(parent::behaviors(), [
-            "auth" => [
-                'class' => HttpBearerAuth::class
-            ],
+//            "auth" => [
+//                'class' => HttpBearerAuth::class
+//            ],
         ]);
     }
 }
