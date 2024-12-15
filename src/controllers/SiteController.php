@@ -47,7 +47,11 @@ class SiteController extends Controller
 
     public function actionSentry()
     {
-        captureException(new \Exception("Huhu"));
+        try {
+            throw new \Exception("Sentry Verify");
+        } catch (\Throwable $exception) {
+            \Sentry\captureException($exception);
+        }
     }
 
 }
