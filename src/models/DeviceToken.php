@@ -12,7 +12,7 @@ use yii\behaviors\TimestampBehavior;
  */
 class DeviceToken extends BaseDeviceToken
 {
-    public $tokenExpiration = 60 * 24 * 365; // in seconds
+    public $tokenExpiration = 60 * 60 * 24 * 365; // in seconds
 
     public $otpExpiration = 5 * 60;
     public $defaultAccessGiven = '{"access":["all"]}';

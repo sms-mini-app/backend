@@ -40,7 +40,7 @@ class DeviceController extends Controller
     {
         $versionLevel = Yii::$app->request->post("version_level");
         $app = App::find()->where(["version_level" => $versionLevel])->active()->one();
-        if (!$app) {
+        if (empty($app)) {
             return $this->responseBuilder->json(false, [], "Version invalid", ApiConstant::STATUS_BAD_REQUEST);
         }
         $appVersionLast = App::find()->limit(1)->active()->orderBy(["version_level" => SORT_DESC])->one();
@@ -71,27 +71,27 @@ class DeviceController extends Controller
     public function actionRegister(): array
     {
         $deviceUuid = Yii::$app->request->post("device_uuid");
-        if (!$deviceUuid) {
+        if (empty($deviceUuid)) {
             return $this->responseBuilder->json(false, [], "Mission device uuid", ApiConstant::STATUS_BAD_REQUEST);
         }
         $deviceUuidHash = md5($deviceUuid);
         $device = DeviceForm::find()->where(["device_uuid_hash" => $deviceUuidHash])->one();
-        if (!$device) {
+        if (empty($device)) {
             $device = new DeviceForm(["device_uuid_hash" => $deviceUuidHash]);
         }
         $device->load(Yii::$app->request->post());
-        if (!$device->version_level) {
+        if (empty($device->version_level)) {
             return $this->responseBuilder->json(false, $device, "Can't register device version old", ApiConstant::STATUS_BAD_REQUEST);
         }
-        if (!$device->validate() || !$device->save()) {
-            return $this->responseBuilder->json(false, $device, "Can't register device", ApiConstant::STATUS_BAD_REQUEST);
+        if ($device->validate() && $device->save()) {
+            $deviceToken = DeviceToken::find()->where(["device_id" => $device->id])->available()->one();
+            if (empty($deviceToken)) {
+                $deviceToken = new DeviceToken();
+                $deviceToken->generateToken($device->id);
+                $deviceToken->save(false);
+            }
+            return $this->responseBuilder->json(true, ["device" => $device, "token" => $deviceToken->token], "Success");
         }
-        $deviceToken = DeviceToken::find()->where(["device_id" => $device->id])->available()->one();
-        if (!$deviceToken) {
-            $deviceToken = new DeviceToken();
-            $deviceToken->generateToken($device->id);
-            $deviceToken->save(false);
-        }
-        return $this->responseBuilder->json(true, ["device" => $device, "token" => $deviceToken->token], "Success");
+        return $this->responseBuilder->json(false, $device, "Can't register device", ApiConstant::STATUS_BAD_REQUEST);
     }
 }
