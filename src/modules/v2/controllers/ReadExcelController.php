@@ -65,6 +65,10 @@ class ReadExcelController extends Controller
         $alphabets = range("a", "z");
         $rowMax = count($row);
         for ($i = 0; $i < $rowMax; $i++) {
+            // get maximum is column z
+            if(empty($alphabets[$i])){
+                break;
+            }
             $key = "//$alphabets[$i]";
             $columnsReplace[$key] = $row[$i];
         }
