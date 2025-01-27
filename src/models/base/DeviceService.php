@@ -6,25 +6,20 @@ namespace app\models\base;
 
 use Yii;
 use yii\helpers\ArrayHelper;
-use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
-use \app\models\SessionWorkQuery;
+use \app\models\DeviceServiceQuery;
 
 /**
- * This is the base-model class for table "session_works".
+ * This is the base-model class for table "device_services".
  *
  * @property integer $id
- * @property array $report
- * @property string $filename
- * @property string $data
- * @property string $select_data
- * @property integer $is_session_current
- * @property integer $type
- * @property integer $created_by
+ * @property integer $device_id
+ * @property integer $service_id
+ * @property string $token
  * @property string $created_at
  * @property string $updated_at
  */
-abstract class SessionWork extends \yii\db\ActiveRecord
+abstract class DeviceService extends \yii\db\ActiveRecord
 {
 
     /**
@@ -32,7 +27,7 @@ abstract class SessionWork extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'session_works';
+        return 'device_services';
     }
 
     /**
@@ -41,10 +36,6 @@ abstract class SessionWork extends \yii\db\ActiveRecord
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['blameable'] = [
-            'class' => BlameableBehavior::class,
-            'updatedByAttribute' => false,
-    ];
         $behaviors['timestamp'] = [
             'class' => TimestampBehavior::class,
             'value' => (new \DateTime())->format('Y-m-d H:i:s'),
@@ -60,10 +51,8 @@ abstract class SessionWork extends \yii\db\ActiveRecord
     {
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
-            [['report'], 'safe'],
-            [['data', 'select_data'], 'string'],
-            [['is_session_current', 'type'], 'integer'],
-            [['filename'], 'string', 'max' => 500]
+            [['device_id', 'service_id'], 'integer'],
+            [['token'], 'string', 'max' => 255]
         ]);
     }
 
@@ -74,13 +63,9 @@ abstract class SessionWork extends \yii\db\ActiveRecord
     {
         return ArrayHelper::merge(parent::attributeLabels(), [
             'id' => 'ID',
-            'created_by' => 'Created By',
-            'report' => 'Report',
-            'filename' => 'Filename',
-            'data' => 'Data',
-            'select_data' => 'Select Data',
-            'is_session_current' => 'Is Session Current',
-            'type' => 'Type',
+            'device_id' => 'Device ID',
+            'service_id' => 'Service ID',
+            'token' => 'Token',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ]);
@@ -88,10 +73,10 @@ abstract class SessionWork extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return SessionWorkQuery the active query used by this AR class.
+     * @return DeviceServiceQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new SessionWorkQuery(static::class);
+        return new DeviceServiceQuery(static::class);
     }
 }

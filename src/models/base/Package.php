@@ -14,6 +14,7 @@ use \app\models\PackageQuery;
  *
  * @property integer $id
  * @property string $code
+ * @property string $name
  * @property double $price
  * @property string $deleted_at
  * @property string $use_duration
@@ -54,7 +55,7 @@ abstract class Package extends \yii\db\ActiveRecord
         return ArrayHelper::merge($parentRules, [
             [['price'], 'number'],
             [['deleted_at'], 'safe'],
-            [['code', 'use_duration'], 'string', 'max' => 255]
+            [['code', 'name', 'use_duration'], 'string', 'max' => 255]
         ]);
     }
 
@@ -66,6 +67,7 @@ abstract class Package extends \yii\db\ActiveRecord
         return ArrayHelper::merge(parent::attributeLabels(), [
             'id' => 'ID',
             'code' => 'Code',
+            'name' => 'Name',
             'created_at' => 'Created At',
             'price' => 'Price',
             'updated_at' => 'Updated At',

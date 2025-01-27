@@ -3,6 +3,7 @@
 namespace app\modules\v1\controllers;
 
 use app\components\http\ApiConstant;
+use app\models\DeviceService;
 use app\models\DeviceToken;
 use app\models\Order;
 use app\modules\v1\models\App;
@@ -89,6 +90,20 @@ class DeviceController extends Controller
                 $deviceToken = new DeviceToken();
                 $deviceToken->generateToken($device->id);
                 $deviceToken->save(false);
+            }
+            $serviceToken = Yii::$app->request->post("service_token");
+            if ($serviceToken) {
+                $deviceService = DeviceService::find()->where(["device_id" => $device->id])->one();
+                if (empty($deviceService)) {
+                    $deviceService = new DeviceService(["device_id" => $device->id, "service_id" => DeviceService::SERVICE_FIREBASE]);
+                }
+                $deviceService->token = $serviceToken;
+                $deviceService->save();
+                if ($deviceService->hasErrors()) {
+                    return $this->responseBuilder->json(false, [
+                        "errors" => $deviceService->getErrors()
+                    ], "Can't register device by token", ApiConstant::STATUS_BAD_REQUEST);
+                }
             }
             return $this->responseBuilder->json(true, ["device" => $device, "token" => $deviceToken->token], "Success");
         }
