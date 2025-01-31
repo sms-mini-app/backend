@@ -61,7 +61,7 @@ abstract class SessionWork extends \yii\db\ActiveRecord
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
             [['report'], 'safe'],
-            [['data', 'select_data'], 'string'],
+            [['data', 'select_data'], 'safe'],
             [['is_session_current', 'type'], 'integer'],
             [['filename'], 'string', 'max' => 500]
         ]);
