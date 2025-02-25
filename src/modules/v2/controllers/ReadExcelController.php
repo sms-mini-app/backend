@@ -5,6 +5,8 @@ namespace app\modules\v2\controllers;
 use app\components\http\ApiConstant;
 use app\helpers\ArrayHelper;
 use app\helpers\StringHelper;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use Yii;
 use yii\web\UploadedFile;
 
 class ReadExcelController extends Controller
@@ -15,12 +17,18 @@ class ReadExcelController extends Controller
     public function actionCreate()
     {
         $file = UploadedFile::getInstanceByName("file");
-        if (!$file) {
-            return $this->responseBuilder->json(false, [], "Fail", ApiConstant::STATUS_BAD_REQUEST);
+        $sheetIndex = Yii::$app->request->post("sheet-index");
+        $sheetIndex = intval($sheetIndex);
+        if (empty($file)) {
+            return $this->responseBuilder->json(false, [], "File not found", ApiConstant::STATUS_BAD_REQUEST);
         }
         /** Load $inputFileName to a Spreadsheet Object **/
-        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($file->tempName);
-        $worksheet = $spreadsheet->getActiveSheet();
+        $spreadsheet = IOFactory::load($file->tempName);
+        if ($sheetIndex < 0 || $sheetIndex >= $spreadsheet->getSheetCount()) {
+            $worksheet = $spreadsheet->getActiveSheet();
+        } else {
+            $worksheet = $spreadsheet->getSheet($sheetIndex);
+        }
         $result = [];
         $time = time();
 
@@ -66,7 +74,7 @@ class ReadExcelController extends Controller
         $rowMax = count($row);
         for ($i = 0; $i < $rowMax; $i++) {
             // get maximum is column z
-            if(empty($alphabets[$i])){
+            if (empty($alphabets[$i])) {
                 break;
             }
             $key = "//$alphabets[$i]";
@@ -85,5 +93,18 @@ class ReadExcelController extends Controller
             return $str;
         }
         return StringHelper::slugVn($str);
+    }
+
+    /**
+     * @return array
+     */
+    public function actionSheet(): array
+    {
+        $file = UploadedFile::getInstanceByName("file");
+        if ($file) {
+            $spreadsheet = IOFactory::load($file->tempName);
+            return $this->responseBuilder->json(true, $spreadsheet->getSheetNames(), "Success", ApiConstant::STATUS_OK);
+        }
+        return $this->responseBuilder->json(false, [], "Fail", ApiConstant::STATUS_BAD_REQUEST);
     }
 }
