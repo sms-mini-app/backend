@@ -35,4 +35,9 @@ class Order extends BaseOrder
     {
         $this->expired_at = date("Y-m-d H:i:s", time() + $duration);
     }
+
+    public function addUseDurationDemo()
+    {
+        $this->expired_at = date("Y-m-d 19:00:00", time());
+    }
 }

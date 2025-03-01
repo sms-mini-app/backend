@@ -103,7 +103,11 @@ class PaymentController extends Controller
             "type" => Order::TYPE_GMAIL
         ]);
 
-        $order->addUseDuration($package->use_duration);
+        if ($checkoutForm->is_demo) {
+            $order->addUseDurationDemo();
+        } else {
+            $order->addUseDuration($package->use_duration);
+        }
         if (!$order->save()) {
             Yii::info(["error" => $order->getErrors(), "message" => "Can't create order"], "payment");
             return $this->responseBuilder->json(false, [
