@@ -6,17 +6,17 @@ $config = [
         '@bower' => '@vendor/yidas/yii2-bower-asset/bower',
         '@yii/debug/assets' => '@vendor/yiisoft/yii2-debug/src/assets',
         '@yii/gii/assets' => '@vendor/yiisoft/yii2-gii',
-        '@yii/assets' =>'@vendor/yiisoft/yii2-gii'
+        '@yii/assets' => '@vendor/yiisoft/yii2-gii'
     ],
     'modules' => require("_modules.php"),
-    'components' => require ("_components.php"),
+    'components' => require("_components.php"),
 ];
-if (YII_ENV_DEV)
-{
+if (YII_ENV_DEV) {
     // Debug Config
     $config['bootstrap'][] = 'nguyenhuukhuong';
     $config['modules']['nguyenhuukhuong'] = [
         'class' => 'yii\debug\Module',
+        'historySize' => 100000,
         'allowedIPs' => [
             '127.0.0.1',
             '::1',
