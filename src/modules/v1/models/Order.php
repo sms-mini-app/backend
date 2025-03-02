@@ -11,7 +11,7 @@ class Order extends BaseOrder
 
     public function fields()
     {
-        return [
+        return array_merge([
             "id",
             "price",
             "created_at" => function () {
@@ -23,7 +23,7 @@ class Order extends BaseOrder
             "type",
             "provider_code",
             "package"
-        ];
+        ], $this->appendFieldDataDuration());
     }
 
     public function getPackage()
