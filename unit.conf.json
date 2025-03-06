@@ -51,7 +51,8 @@
             "options": {
                 "admin": {
                     "post_max_size": "200M",
-                    "upload_max_filesize": "200M"
+                    "upload_max_filesize": "200M",
+                    "memory_limit": "500MB"
                 }
             }
         }
