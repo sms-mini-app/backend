@@ -57,8 +57,8 @@ class SessionWorkController extends Controller
             "id" => $id,
             "created_by" => $createdBy
         ])->one();
-
-        if (!$sessionWork) {
+        $sessionWork->noDecodingSelectData = boolval(Yii::$app->request->get("no_decoding_select_data"));
+        if (empty($sessionWork)) {
             return $this->responseBuilder->json(false, [], "Error", ApiConstant::STATUS_NOT_FOUND);
         }
         return $this->responseBuilder->json(true, $sessionWork, "Success");
