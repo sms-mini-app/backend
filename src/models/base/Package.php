@@ -15,6 +15,13 @@ use \app\models\PackageQuery;
  * @property integer $id
  * @property string $code
  * @property string $name
+ * @property string $qr_link
+ * @property string $price_text
+ * @property string $subtitle
+ * @property integer $priority
+ * @property array $description_attributes
+ * @property integer $status
+ * @property integer $type
  * @property double $price
  * @property string $deleted_at
  * @property string $use_duration
@@ -53,9 +60,10 @@ abstract class Package extends \yii\db\ActiveRecord
     {
         $parentRules = parent::rules();
         return ArrayHelper::merge($parentRules, [
+            [['priority', 'status', 'type'], 'integer'],
+            [['description_attributes', 'deleted_at'], 'safe'],
             [['price'], 'number'],
-            [['deleted_at'], 'safe'],
-            [['code', 'name', 'use_duration'], 'string', 'max' => 255]
+            [['code', 'name', 'qr_link', 'price_text', 'subtitle', 'use_duration'], 'string', 'max' => 255]
         ]);
     }
 
@@ -68,6 +76,13 @@ abstract class Package extends \yii\db\ActiveRecord
             'id' => 'ID',
             'code' => 'Code',
             'name' => 'Name',
+            'qr_link' => 'Qr Link',
+            'price_text' => 'Price Text',
+            'subtitle' => 'Subtitle',
+            'priority' => 'Priority',
+            'description_attributes' => 'Description Attributes',
+            'status' => 'Status',
+            'type' => 'Type',
             'created_at' => 'Created At',
             'price' => 'Price',
             'updated_at' => 'Updated At',
