@@ -4,6 +4,7 @@ namespace app\modules\v1\controllers;
 
 use app\components\http\ApiConstant;
 use app\controllers\Controller;
+use app\helpers\QrBankHelper;
 use app\modules\v1\models\Device;
 use app\modules\v1\models\form\CheckoutForm;
 use app\modules\v1\models\form\CheckoutFormGmail;
@@ -128,5 +129,17 @@ class PaymentController extends Controller
             "json" => ["token" => "123456abcA"]
         ]);
         return $this->responseBuilder->json(true, [], "payment success");
+    }
+
+    /**
+     * @param int $amount
+     * @param string $accountNoName
+     * @param string $note
+     * @return array
+     */
+    public function actionGenerateQr(int $amount, string $accountNoName, string $note): array
+    {
+        $qrBacker = new QrBankHelper(["amount" => $amount, "accountNoName" => $accountNoName, "note" => $note]);
+        return $this->responseBuilder->json(true, $qrBacker->generate(), "Success");
     }
 }
