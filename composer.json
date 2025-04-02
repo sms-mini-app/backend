@@ -21,7 +21,8 @@
     "ext-openssl": "*",
     "ramsey/uuid": "^4.7",
     "yiisoft/yii2-redis": "^2.0",
-    "phpoffice/phpspreadsheet": "^2.1"
+    "phpoffice/phpspreadsheet": "^2.1",
+    "endroid/qr-code": "^5.1"
   },
   "require-dev": {
     "yidas/yii2-bower-asset": "~2.0.13",

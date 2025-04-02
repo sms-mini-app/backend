@@ -10,10 +10,22 @@ use app\modules\v1\models\form\CheckoutForm;
 use app\modules\v1\models\form\CheckoutFormGmail;
 use app\modules\v1\models\Order;
 use app\modules\v1\models\Package;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Label\Label;
+use Endroid\QrCode\Logo\Logo;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Yii;
 use yii\db\Exception;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\Label\LabelAlignment;
+use Endroid\QrCode\Label\Font\OpenSans;
+use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
+use yii\web\Response;
 
 class PaymentController extends Controller
 {
@@ -141,5 +153,29 @@ class PaymentController extends Controller
     {
         $qrBacker = new QrBankHelper(["amount" => $amount, "accountNoName" => $accountNoName, "note" => $note]);
         return $this->responseBuilder->json(true, $qrBacker->generate(), "Success");
+    }
+
+    /**
+     * @param int $amount
+     * @param string $accountNoName
+     * @param string $note
+     * @return void
+     */
+    public function actionGenerateQrImage(int $amount, string $accountNoName, string $note): void
+    {
+        $qrBanker = new QrBankHelper(["amount" => $amount, "accountNoName" => $accountNoName, "note" => $note]);
+        Yii::$app->response->format = Response::FORMAT_RAW;
+        $writer = new PngWriter();
+        $qrCode = QrCode::create($qrBanker->generate())
+            ->setEncoding(new Encoding('UTF-8'))
+            ->setErrorCorrectionLevel(ErrorCorrectionLevel::Low)
+            ->setSize(300)
+            ->setMargin(10)
+            ->setRoundBlockSizeMode(RoundBlockSizeMode::Margin)
+            ->setForegroundColor(new Color(0, 0, 0))
+            ->setBackgroundColor(new Color(255, 255, 255));
+        $result = $writer->write($qrCode);
+        header('Content-Type: ' . $result->getMimeType());
+        Yii::$app->response->data = $result->getString();
     }
 }
