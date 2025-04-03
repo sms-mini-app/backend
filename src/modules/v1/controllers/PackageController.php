@@ -16,10 +16,11 @@ class PackageController extends Controller
         return $this->responseBuilder->json(true, $dataProvider->search(Yii::$app->request->queryParams), "Success");
     }
 
-    public function actionView($id)
+    public function actionView($id, $is_show_qr_code = 0)
     {
         $package = Package::find()->where(["id" => $id])->active()->typeNormal()->one();
         if ($package) {
+            $package->isShowQrCode = $is_show_qr_code;
             return $this->responseBuilder->json(true, ["package" => $package], "Success");
         }
         return $this->responseBuilder->json(false, [], "Package not found", ApiConstant::STATUS_NOT_FOUND);
