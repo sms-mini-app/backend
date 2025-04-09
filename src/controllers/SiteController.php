@@ -37,7 +37,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return "Sms Mini App";
+        return "Khương Nè";
     }
 
     public function actionStatus()
