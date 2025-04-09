@@ -6,7 +6,7 @@ services:
     build:
       dockerfile: Dockerfile
       args:
-        docker_env: dev
+        docker_env: ${YII_ENV}
     ports:
       - 7632:80
     privileged: true
