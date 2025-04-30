@@ -8,6 +8,7 @@ use app\helpers\StringHelper;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use yii\web\UploadedFile;
+use Ramsey\Uuid\Uuid;
 
 class ReadExcelController extends Controller
 {
@@ -43,9 +44,9 @@ class ReadExcelController extends Controller
             $fullName = $row[0];
             $phones = preg_split("/[., ;|]/", $row[2], -1, PREG_SPLIT_NO_EMPTY);
             foreach ($phones as $phone) {
-                $columnReplaces = $this->getColumnsReplace($row);
+                $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                 $result[] = [
-                    "id" => $time + $index,
+                    "id" => Uuid::uuid4(),
                     "fullname" => $this->handleText($fullName),
                     "phone" => StringHelper::filterPhone($this->handleText($phone)),
                     "address" => $row[3] ?? "",
@@ -64,10 +65,11 @@ class ReadExcelController extends Controller
     }
 
     /**
-     * @param $row
+     * @param array $row
+     * @param $valueCompulsory
      * @return array
      */
-    protected function getColumnsReplace($row = [])
+    protected function getColumnsReplace($row = [], $valueCompulsory)
     {
         $columnsReplace = [];
         $alphabets = range("a", "z");
@@ -77,8 +79,13 @@ class ReadExcelController extends Controller
             if (empty($alphabets[$i])) {
                 break;
             }
-            $key = "//$alphabets[$i]";
-            $columnsReplace[$key] = $row[$i];
+            $column = $alphabets[$i];
+            $key = "//$column";
+            if (isset($valueCompulsory[$column])) {
+                $columnsReplace[$key] = $valueCompulsory[$column];
+            } else {
+                $columnsReplace[$key] = $row[$i];
+            }
         }
         return $columnsReplace;
     }
