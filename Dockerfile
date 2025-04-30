@@ -29,17 +29,17 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-plugins --no-scripts && \
     composer clear-cache
 
-ADD yii /app/
-ADD web /app/web/
-ADD src /app/src/
-ADD config /app/config
+ADD --chown=unit:unit yii /app/
+ADD --chown=unit:unit web /app/web/
+ADD --chown=unit:unit src /app/src/
+ADD --chown=unit:unit config /app/config
 
-COPY .env-dist ./.env
+COPY --chown=unit:unit .env-dist ./.env
 COPY unit.conf.json /docker-entrypoint.d/.unit.conf.json
 
 RUN mkdir -p runtime web/assets && \
-    chmod -R 775 runtime web/assets
-RUN chown -R unit:unit /app
+    chmod -R 775 runtime web/assets && \
+    chown -R unit:unit runtime web/assets
 
 CMD ["unitd", "--no-daemon", "--control", "unix:/var/run/control.unit.sock"]
 EXPOSE 80
