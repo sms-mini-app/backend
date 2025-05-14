@@ -5,7 +5,6 @@ namespace app\modules\v2\controllers;
 use app\components\http\ApiConstant;
 use app\helpers\ArrayHelper;
 use app\helpers\StringHelper;
-use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use yii\web\UploadedFile;
@@ -15,7 +14,6 @@ class ReadExcelController extends Controller
 {
     /**
      * @return array
-     * @throws Exception
      */
     public function actionCreate()
     {
@@ -52,7 +50,7 @@ class ReadExcelController extends Controller
                     $ordinalNumbers++;
                     $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                     $result[] = [
-                        "id" => $ordinalNumbers,
+                        "id" => $ordinalNumbers . "-" . Uuid::uuid4(),
                         "fullname" => $this->handleText($fullName),
                         "phone" => StringHelper::filterPhone($this->handleText($phone)),
                         "address" => $row[3] ?? "",
