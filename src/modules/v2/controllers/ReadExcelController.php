@@ -23,6 +23,7 @@ class ReadExcelController extends Controller
         if (empty($file)) {
             return $this->responseBuilder->json(false, [], "File not found", ApiConstant::STATUS_BAD_REQUEST);
         }
+        $reason = [];
         /** Load $inputFileName to a Spreadsheet Object **/
         $spreadsheet = IOFactory::load($file->tempName);
         if ($sheetIndex < 0 || $sheetIndex >= $spreadsheet->getSheetCount()) {
@@ -41,27 +42,37 @@ class ReadExcelController extends Controller
             if (!isset($row[0], $row[2])) {
                 continue;
             }
+            $column = $index + 1;
             $fullName = $row[0];
             $phones = preg_split("/[., ;|]/", $row[2], -1, PREG_SPLIT_NO_EMPTY);
             foreach ($phones as $phone) {
-                $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
-                $result[] = [
-                    "id" => Uuid::uuid4(),
-                    "fullname" => $this->handleText($fullName),
-                    "phone" => StringHelper::filterPhone($this->handleText($phone)),
-                    "address" => $row[3] ?? "",
-                    "" => $row[3] ?? "",
-                    "option_1" => $row[4] ?? "",
-                    "option_2" => $row[5] ?? "",
-                    "option_3" => $row[6] ?? "",
-                    "column_replaces" => $columnReplaces
-                ];
+                if (preg_match("/^\d{9,20}$/", $phone)) {
+                    $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
+                    $result[] = [
+                        "id" => Uuid::uuid4(),
+                        "fullname" => $this->handleText($fullName),
+                        "phone" => StringHelper::filterPhone($this->handleText($phone)),
+                        "address" => $row[3] ?? "",
+                        "" => $row[3] ?? "",
+                        "option_1" => $row[4] ?? "",
+                        "option_2" => $row[5] ?? "",
+                        "option_3" => $row[6] ?? "",
+                        "column_replaces" => $columnReplaces
+                    ];
+                } else {
+                    $reason[] = "Cột C$column chứa SDT không hợp lệ";
+                    break;
+                }
             }
         }
         if (!empty($_POST["remove_duplicate"])) {
             $result = ArrayHelper::uniqueColumn($result, "phone");
         }
-        return $this->responseBuilder->json(true, $result, "Success");
+        return $this->responseBuilder->json(true, $result, "Success", ApiConstant::STATUS_OK, [
+            "has_error" => !empty($reason),
+            "reason" => join(PHP_EOL, $reason),
+            "document" => "Đảm bảo cột C là kiểu Text, có thể sử dụng: ;|,. để phân tách nhiều SĐT",
+        ]);
     }
 
     /**

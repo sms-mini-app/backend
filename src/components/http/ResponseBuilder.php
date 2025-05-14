@@ -13,12 +13,13 @@ class ResponseBuilder extends BaseObject
 {
     /**
      * @param bool $status
-     * @param $data
+     * @param null $data
      * @param string $message
      * @param int $code
+     * @param array $extras
      * @return array
      */
-    public function json(bool $status = true, $data = null, string $message = "", int $code = 200): array
+    public function json(bool $status = true, $data = null, string $message = "", int $code = 200, array $extras = []): array
     {
         Yii::$app->response->statusCode = $code;
         if ($data instanceof DataProviderInterface) {
@@ -29,6 +30,7 @@ class ResponseBuilder extends BaseObject
             "status" => $status,
             "data" => $data,
             "messages" => $message,
+            "extras" => $extras,
             "code" => $code
         ];
     }
