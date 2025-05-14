@@ -50,7 +50,7 @@ class ReadExcelController extends Controller
                     $ordinalNumbers++;
                     $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                     $result[] = [
-                        "id" => $ordinalNumbers . "-" . Uuid::uuid4(),
+                        "id" => $ordinalNumbers,
                         "fullname" => $this->handleText($fullName),
                         "phone" => StringHelper::filterPhone($this->handleText($phone)),
                         "address" => $row[3] ?? "",
