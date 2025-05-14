@@ -5,6 +5,7 @@ namespace app\modules\v2\controllers;
 use app\components\http\ApiConstant;
 use app\helpers\ArrayHelper;
 use app\helpers\StringHelper;
+use Exception;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use Yii;
 use yii\web\UploadedFile;
@@ -14,6 +15,7 @@ class ReadExcelController extends Controller
 {
     /**
      * @return array
+     * @throws Exception
      */
     public function actionCreate()
     {
@@ -33,7 +35,7 @@ class ReadExcelController extends Controller
         }
         $result = [];
         $time = time();
-
+        $ordinalNumbers = 0;
         $worksheet->toArray();
         foreach ($worksheet->toArray(null, true, false) as $index => $row) {
             if ($index == 0) {
@@ -47,9 +49,10 @@ class ReadExcelController extends Controller
             $phones = preg_split("/[., ;|]/", $row[2], -1, PREG_SPLIT_NO_EMPTY);
             foreach ($phones as $phone) {
                 if (preg_match("/^\d{9,20}$/", $phone)) {
+                    $ordinalNumbers++;
                     $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                     $result[] = [
-                        "id" => Uuid::uuid4(),
+                        "id" => $ordinalNumbers,
                         "fullname" => $this->handleText($fullName),
                         "phone" => StringHelper::filterPhone($this->handleText($phone)),
                         "address" => $row[3] ?? "",
@@ -57,10 +60,10 @@ class ReadExcelController extends Controller
                         "option_1" => $row[4] ?? "",
                         "option_2" => $row[5] ?? "",
                         "option_3" => $row[6] ?? "",
-                        "column_replaces" => $columnReplaces
+                        "column_replaces" => $columnReplaces,
                     ];
                 } else {
-                    $reason[] = "Cột C$column chứa SDT không hợp lệ";
+                    $reason[] = "Ô C$column không hợp lệ";
                     break;
                 }
             }
