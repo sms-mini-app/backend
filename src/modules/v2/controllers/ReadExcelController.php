@@ -21,7 +21,6 @@ class ReadExcelController extends Controller
     {
         $file = UploadedFile::getInstanceByName("file");
         try {
-            throw new Exception("demo");
             $sheetIndex = Yii::$app->request->post("sheet-index");
             $sheetIndex = intval($sheetIndex);
             if (empty($file)) {
