@@ -50,7 +50,7 @@ class ReadExcelController extends Controller
                     $ordinalNumbers++;
                     $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                     $result[] = [
-                        "id" => $ordinalNumbers,
+                        "id" => Uuid::uuid4(),
                         "fullname" => $this->handleText($fullName),
                         "phone" => StringHelper::filterPhone($this->handleText($phone)),
                         "address" => $row[3] ?? "",
@@ -59,6 +59,7 @@ class ReadExcelController extends Controller
                         "option_2" => $row[5] ?? "",
                         "option_3" => $row[6] ?? "",
                         "column_replaces" => $columnReplaces,
+                        "ordinal_numbers" => $ordinalNumbers
                     ];
                 } else {
                     $reason[] = "Ô C$column không hợp lệ";
