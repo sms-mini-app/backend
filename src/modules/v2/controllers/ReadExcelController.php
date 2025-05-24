@@ -54,7 +54,9 @@ class ReadExcelController extends Controller
                         $ordinalNumbers++;
                         $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                         foreach ($columnReplaces as $column => $replace) {
-                            $listColumnExistData[$column] = $column;
+                            if (empty($replace) === false) {
+                                $listColumnExistData[$column] = $column;
+                            }
                         }
                         $result[] = [
                             "id" => Uuid::uuid4(),
