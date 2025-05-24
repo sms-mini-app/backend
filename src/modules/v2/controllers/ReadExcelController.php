@@ -21,6 +21,7 @@ class ReadExcelController extends Controller
     {
         $file = UploadedFile::getInstanceByName("file");
         try {
+            $listColumnExistData = [];
             $sheetIndex = Yii::$app->request->post("sheet-index");
             $sheetIndex = intval($sheetIndex);
             if (empty($file)) {
@@ -52,6 +53,9 @@ class ReadExcelController extends Controller
                     if (preg_match("/^\d{9,20}$/", $phone)) {
                         $ordinalNumbers++;
                         $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
+                        foreach ($columnReplaces as $column => $replace) {
+                            $listColumnExistData[$column] = $column;
+                        }
                         $result[] = [
                             "id" => Uuid::uuid4(),
                             "fullname" => $this->handleText($fullName),
@@ -77,6 +81,7 @@ class ReadExcelController extends Controller
                 "has_error" => !empty($reason),
                 "reason" => join(PHP_EOL, $reason),
                 "document" => "Đảm bảo cột C là kiểu Text, có thể sử dụng: ;|,. để phân tách nhiều SĐT",
+                "list_columns_exist_data" => $listColumnExistData
             ]);
         } catch (Exception $exception) {
             $folderPath = Yii::getAlias("@webroot/excel");
