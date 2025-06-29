@@ -21,7 +21,7 @@ class ErrorAppController extends Controller
             if (is_dir($folder) === false) {
                 mkdir($folder, 0777, true);
             }
-            $filename = "$folder/" . date("Y_m_h") . ".log";
+            $filename = "$folder/" . date("Y_m_d") . ".log";
             $message = date("Y-m-d H:i:s") . " {$error}";
             file_put_contents($filename, $message . "\n", FILE_APPEND);
             return "stored";
