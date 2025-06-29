@@ -51,6 +51,7 @@ class ReadExcelController extends Controller
                 $phones = preg_split("/[., ;|]/", $row[2], -1, PREG_SPLIT_NO_EMPTY);
                 foreach ($phones as $phone) {
                     if (preg_match("/^\d{9,20}$/", $phone)) {
+                        $phone = StringHelper::filterPhone($this->handleText($phone));
                         $ordinalNumbers++;
                         $columnReplaces = $this->getColumnsReplace($row, ["c" => $phone]);
                         foreach ($columnReplaces as $column => $replace) {
@@ -61,7 +62,7 @@ class ReadExcelController extends Controller
                         $result[] = [
                             "id" => Uuid::uuid4(),
                             "fullname" => $this->handleText($fullName),
-                            "phone" => StringHelper::filterPhone($this->handleText($phone)),
+                            "phone" => $phone,
                             "address" => $row[3] ?? "",
                             "" => $row[3] ?? "",
                             "option_1" => $row[4] ?? "",
@@ -101,7 +102,7 @@ class ReadExcelController extends Controller
      * @param $valueCompulsory
      * @return array
      */
-    protected function getColumnsReplace($row = [], $valueCompulsory)
+    public function getColumnsReplace($row, $valueCompulsory)
     {
         $columnsReplace = [];
         $alphabets = range("a", "z");
