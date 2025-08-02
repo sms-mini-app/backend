@@ -9,7 +9,7 @@ class ErrorAppController extends Controller
 {
     public function actionContact()
     {
-        $this->redirect("https://zalo.me/0394182551");
+        $this->redirect("https://zaloapp.com/qr/p/kuwzaf0vfmq9");
     }
 
 
